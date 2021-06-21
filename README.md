@@ -1,7 +1,7 @@
 
 Welcome to Anke's thesis page!
 
-The source folder contains the following modules:
+The src folder contains the following modules:
 
 - Data: the dataloader and making a report table and graph:scroll: 
 - Offlinemodels: setup of the non-private batch models :pizza: 
