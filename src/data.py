@@ -170,8 +170,8 @@ class DataLoader(object):
                 data = data[data['emaillen']!=0]
                 
                 number = len(data)
-                oldest= min(data['date_time']).strftime("%b %d, %Y")
-                newest = max(data['date_time']).strftime("%b %d, %Y")
+                oldest= min(data['dates']).strftime("%b %d, %Y")
+                newest = max(data['dates']).strftime("%b %d, %Y")
                 
                 results = []
                 for stat in [np.mean, np.std, np.min, np.max]:
@@ -245,18 +245,19 @@ class DataLoader(object):
         plt.show()
         fig.savefig('../output/VectorGraphPer' + str(p) + '.pdf', format = 'pdf')
         
+        plt.clf()
+        
         # Make histogram
         teststart = int(11050*0.8)
         df = emailslab
-        df['dates'] = [datetime.strptime(str(d)[:-15], '%Y-%m-%d') for d in df['date_time']]
 
         plt.figure(figsize=(4,3), dpi= 80)
         fig, ax = plt.subplots()
 
         plt.ylabel = "Emails"
 
-        x1 = df.loc[df.lab_bin==0, 'dates']
-        x2 = df.loc[df.lab_bin==1, 'dates']
+        x1 = df.loc[df.lab_bin=="Business", 'dates']
+        x2 = df.loc[df.lab_bin=="Personal", 'dates']
 
         formatter = mdates.DateFormatter("%b %Y")
         ax.xaxis.set_major_formatter(formatter)
@@ -281,9 +282,11 @@ class DataLoader(object):
         vect = TfidfVectorizer(max_features = 5000, min_df = 5, max_df = 0.7)
         X = vect.fit_transform(emailslab.loc[:,'body']).toarray()
         
+        emailslab['dates'] = [datetime.strptime(str(d)[:-15], '%Y-%m-%d') for d in emailslab['date_time']]
+        
         statstab, wordtab = self.maketables(emailslab, vect)
         self.makegraphs(emailslab, X)
-        
+        print(statstab)
         return statstab, wordtab
          
 
@@ -299,8 +302,6 @@ class DataLoader(object):
         
         emailslab = self.prep_data(emails, labels)
         emailslab = self.order_data(emailslab)
-        
-        self.report(emailslab)
         
         with open(path + '/enronlab.pickle', 'wb') as f: # offline
              pickle.dump(emailslab, f)
@@ -343,5 +344,4 @@ if __name__ == "__main__":
     report, wordtab = load.report(emails)
     print(report)
     print(wordtab)
-  
 
