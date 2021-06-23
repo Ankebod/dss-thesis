@@ -150,7 +150,7 @@ class LinearOnline(object):
          
         return vectors
         
-    def train(self, n, window_size = 1000, nbatch = 5, test = False):
+    def train(self, n, window_size = 1000, nbatch = 1, test = False):
         
         auc, acc, f1, prec, rec = metrics.ROCAUC(), metrics.Accuracy(), metrics.F1(), metrics.Precision(), metrics.Recall()
         if test == False:
