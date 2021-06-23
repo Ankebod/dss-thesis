@@ -161,17 +161,17 @@ if __name__ == "__main__":
     tuner = experiments.Experiments(test = False)
     
     offlineres = tuner.offline()
-    pprint(offlineres)
+    print("--> offline done")
     with open('../output/offlinevalidation.pkl', 'wb') as output:
         pickle.dump(offlineres, output)
         
     privacyres = tuner.offlineprivacy()
-    pprint(privacyres)
+    print("--> privacy done")
     with open('../output/privacyvalidation.pkl', 'wb') as output:
         pickle.dump(privacyres, output)
         
     onlineres = tuner.online(window_size = 1000)
-    pprint(onlineres)
+    print("--> online done")
     with open('../output/onlinevalidation.pkl', 'wb') as output:
         pickle.dump(onlineres, output)
     
@@ -179,17 +179,17 @@ if __name__ == "__main__":
     tester = experiments.Experiments(test = True)
     
     offlinetest = tester.offline()
-    pprint(offlinetest)
+    print("--> offline done")
     with open('../output/offlinetest.pkl', 'wb') as output:
         pickle.dump(offlinetest, output)
         
     privacytest = tester.offlineprivacy()
-    pprint(privacytest)
+    print("--> privacy done")
     with open('../output/privacytest.pkl', 'wb') as output:
         pickle.dump(privacytest, output)
         
     onlinetest = tester.online(window_size = 1000)
-    pprint(onlineres)
+    print("--> online done")
     with open('../output/onlinetest.pkl', 'wb') as output:
         pickle.dump(onlinetest, output)
     
@@ -228,7 +228,7 @@ if __name__ == "__main__":
     
     exports = zip(["offlinetab", "privtab", "onlinetab", "baseonltable", "onlinedrifttable"], [offlinetable, privtable, onlinetable, baseonltable, onlinedrifttable])
     for name, table in exports:
-        print(name, table)
+        print(name,'\n', table)
         file = open("../output/" + name + ".txt","w")
         file.write(table)
         file.close()
