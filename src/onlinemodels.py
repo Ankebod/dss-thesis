@@ -217,7 +217,7 @@ class LinearOnline(object):
                 cvscores.append(result)
 
         if test == False:
-            return np.mean(cvscores), cvscores
+            return np.mean(cvscores), cvscores, None
         
         if test == True:
             return [np.mean(aucs[teststart:]), np.mean(accs[teststart:]),np.mean(f1s[teststart:]),np.mean(precs[teststart:]), np.mean(recs[teststart:])],  [aucs[teststart:], accs[teststart:], f1s[teststart:]], [aucs, accs, f1s]
