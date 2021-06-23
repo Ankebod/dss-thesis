@@ -145,30 +145,6 @@ def tablebuild(results, headers):
 
 
 # +
-from scipy.stats import ttest_rel
-    
-def test(cvoff, cvpriv, cvon):
-    onres = []
-    privres = []
-
-    headers = ["Stat Onl", "P Onl", "Stat Priv", "P Priv"]
-    
-    for m, metric in enumerate(["AUC", "Acc", "F1"]):
-        on = ttest_rel(cvon[m], cvoff[m])
-        priv = ttest_rel(cvpriv[m], cvoff[m])
-        onres.append([metric, np.round(on[0], decimals = 3), np.round(on[1], decimals = 3)])
-        privres.append(np.round([priv[0], priv[1]], decimals = 3))
-    
-    a = np.vstack(onres)
-    b = np.vstack(privres)
-    c = np.hstack([a, b])
-    
-    tab = tabulate(c, headers, tablefmt = 'latex_raw')
-
-    return tab
-
-
-# +
 if __name__ == "__main__":
     # Process and write data to disk
     PATH = '../data/'
@@ -176,7 +152,8 @@ if __name__ == "__main__":
     LABNAME = 'enron_emails.csv'
     ANNOTATORS = 8
 
-#     load = data.DataLoader(annotators=ANNOTATORS)
+#     NOTE: next two lines are heavy for memory. Can be run once and then all files are set up on storage.
+#     load = data.DataLoader(annotators=ANNOTATORS) 
 #     emails = load.run(path=PATH, emailname=EMAILNAME, labname=LABNAME)
     
     # Validation and testing
@@ -256,42 +233,4 @@ if __name__ == "__main__":
         file.write(table)
         file.close()
 # -
-if __name__ == "__main__":    
-    N = 11049
-    stem = False
-    drift = False
-    imbal = True
-    extended = False
-    feature = "glovemean"
-    epsilon = 30
-    k = 5
-    
-    print("\n\nLogistic Regression:")
-    
-    pipe = offlinemodels.Offline(model_type = 'lr')
-    results, offcv = pipe.train(n = N, features = feature, k = k, extended = extended, stem = stem, test = False)
-    
-    pipe = privacymodels.Privacy(model_type = 'lr', lre = epsilon/2, sse = epsilon/2)
-    results, privcv = pipe.train(n = N, features = 'glovemean', k = k, extended = extended, stem = stem)
-    
-    pipe = onlinemodels.LinearOnline(model_type = 'lr', stem = stem, features = feature, imbal = imbal, drift = drift)    
-    results, oncv = pipe.train(n = N, test = False, nbatch = k)
-    
-    print("Test")
-    print(test(offcv, privcv, oncv))
-    
-    print("\n\nNaive Bayes:")
-    
-    pipe = offlinemodels.Offline(model_type = 'nb')
-    results, offcv = pipe.train(n = N, features = feature, k = k, extended = extended, stem = stem, test = False)
-    
-    pipe = privacymodels.Privacy(model_type = 'nb', lre = epsilon/2, sse = epsilon/2)
-    results, privcv = pipe.train(n = N, features = 'glovemean', k = k, extended = extended, stem = stem)
-
-    pipe = onlinemodels.LinearOnline(model_type = 'nb', stem = stem, features = feature, imbal = imbal, drift = drift)    
-    results, oncv = pipe.train(n = N, test = False, nbatch = k)
-    
-    print("Test")
-    print(test(offcv, privcv, oncv))
-
 
