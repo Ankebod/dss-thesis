@@ -18,6 +18,8 @@ from tabulate import tabulate
 from pprint import pprint
 import numpy as np
 import matplotlib.pyplot as plt
+import warnings
+warnings.filterwarnings('ignore') 
 
 import offlinemodels
 import onlinemodels
@@ -101,7 +103,8 @@ def baseonlselect(results, testresults):
 
 def onlineselect(results, testresults, drift = False):
     output = []
-    for res in [results, testresults]:    
+    for res in [results, testresults]: 
+
         onlinesort = sorted(res, key=lambda x: x[1][0], reverse = True)
         best_nb_tfidf, best_lr_tfidf, best_nb_emb, best_lr_emb, best_nc_tfidf = None, None, None, None, None
 
