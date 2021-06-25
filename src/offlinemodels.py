@@ -176,14 +176,12 @@ class Linear:
         metrics = [sk.metrics.roc_auc_score, sk.metrics.accuracy_score, sk.metrics.f1_score, sk.metrics.precision_score, sk.metrics.recall_score]
         results = []
         
-        cvscores = []
         if test == False:
             cv = model_selection.StratifiedKFold(n_splits= k, shuffle=True, random_state=42) 
 
             for metric in metrics:
                 result = model_selection.cross_val_score(self.model, X_train, y_train, scoring=sk.metrics.make_scorer(metric), cv=cv)
                 results.append(np.mean(result))
-                cvscores.append(result)
 
         if test == True:
             self.model.fit(X_train, y_train)
@@ -194,7 +192,7 @@ class Linear:
                 result = metric(y_test, y_pred)
                 results.append(result)
         
-        return results, cvscores
+        return results
     
         
             
@@ -230,12 +228,12 @@ if __name__ == "__main__":
     
     print('\nLogistic Regression: \n-------------------')
     pipe = Offline(model_type = 'lr')
-    results, cvscores = pipe.train(n = N, features = 'glovemean', extended = False, stem = False, test = False)
+    results = pipe.train(n = N, features = 'glovemean', extended = False, stem = False, test = False)
     print(f'AUC, ACC, F1: {results}')
     
     print('\nNaive Bayes: \n-------------------')
     pipe = Offline(model_type = 'nb')
-    results, cvscores = pipe.train(n = N, features = 'glovemean', extended = False, stem = False, test = False)
+    results = pipe.train(n = N, features = 'glovemean', extended = False, stem = False, test = False)
     print(f'AUC, ACC, F1: {results}')
     print(cvscores)
 
