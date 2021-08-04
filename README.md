@@ -11,5 +11,5 @@ The src folder contains the following modules:
 - Experiments: setting up a class for validation and testing :question: 
 - Analysis: running experiments and making result tables :boom: 
 
-The analysis script can be run as a standalone to obtain the final results tables.
+The analysis script can be run as a stand alone to obtain the final results tables.
 
